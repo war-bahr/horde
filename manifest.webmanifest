@@ -1,12 +1,12 @@
 {
   "name": "Horde",
   "short_name": "Horde",
-  "description": "Command the dead across a living low-poly world. Infect towns, leave garrisons, and overrun the region.",
+  "description": "Plant a nest on a living low-poly world, raid settlements from hamlet to megacity, and watch the invasion live.",
   "id": "/horde/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "portrait",
   "background_color": "#05081a",
   "theme_color": "#0b1230",
   "icons": [
