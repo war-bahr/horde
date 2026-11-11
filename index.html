@@ -14,8 +14,56 @@
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./icons/icon-192.png" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <script type="module" crossorigin src="./assets/index-B4oFe_qs.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Dyd0d3YV.css">
+    <style>#boot-error{color:#c9d4ee;text-align:center;word-break:break-word;max-width:22em;margin:14px 16px 0;font-size:12px;line-height:1.4}#boot-retry{color:#ffe7a3;font:inherit;background:#f5cf6b33;border:1px solid #f5cf6b;border-radius:12px;margin-top:16px;padding:10px 22px;font-size:15px}</style>
+    <script>
+      (function () {
+        var KEY = 'horde-boot-log';
+        var started = Date.now();
+        function rec(msg, extra) {
+          try {
+            localStorage.setItem(KEY, JSON.stringify({
+              t: Date.now(), msg: String(msg || ''), extra: extra ? String(extra).slice(0, 500) : '',
+              ver: document.title, ms: Date.now() - started
+            }));
+          } catch (e) {}
+        }
+        window.__hordeBoot = { record: rec, started: started, key: KEY };
+        window.addEventListener('error', function (e) {
+          rec(e.message || e, (e.filename || '') + ':' + (e.lineno || ''));
+        });
+        window.addEventListener('unhandledrejection', function (e) {
+          rec(e.reason && (e.reason.message || e.reason) || e);
+        });
+        function show(text, retry) {
+          if (window.__hordeBootDone) return;
+          var sub = document.getElementById('boot-sub');
+          var err = document.getElementById('boot-error');
+          var btn = document.getElementById('boot-retry');
+          if (sub) sub.textContent = text || 'Still loading…';
+          if (err) {
+            var last = '';
+            try { var p = JSON.parse(localStorage.getItem(KEY) || 'null'); last = (p && p.msg) || ''; } catch (e) {}
+            if (last && last !== 'ok' && last.indexOf('watchdog-') !== 0) { err.hidden = false; err.textContent = last; }
+          }
+          if (btn) {
+            btn.hidden = !retry;
+            btn.onclick = function () { location.reload(); };
+          }
+        }
+        setTimeout(function () {
+          if (window.__hordeBootDone) return;
+          rec('watchdog-4s');
+          show('Still loading…', false);
+        }, 4000);
+        setTimeout(function () {
+          if (window.__hordeBootDone) return;
+          rec('watchdog-12s');
+          show('Startup is taking too long. You can retry.', true);
+        }, 12000);
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-BGObvmO_.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D9olh5ar.css">
   </head>
   <body>
     <div id="app">
@@ -24,7 +72,9 @@
       <div id="ui"></div>
       <div id="boot">
         <div class="boot-title">Horde</div>
-        <div class="boot-sub">The world turns…</div>
+        <div class="boot-sub" id="boot-sub">The world turns…</div>
+        <div id="boot-error" hidden></div>
+        <button type="button" id="boot-retry" hidden>Retry</button>
       </div>
       <div id="rotate">
         <div class="rotate-card">
