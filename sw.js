@@ -1,11 +1,11 @@
 /* Horde offline shell. Bump CACHE when shipping a new build. */
-const CACHE = 'horde-v8-2';
+const CACHE = 'horde-v9-0';
 const ASSETS = [
   "./",
   "./assets/cinzel-latin-700-normal-C-gK7hA8.woff",
   "./assets/cinzel-latin-700-normal-Dkw14w9r.woff2",
-  "./assets/index-CXSzTZzq.js",
-  "./assets/index-sk6Fix2x.css",
+  "./assets/index-DYBvQP-i.js",
+  "./assets/index-DuG9cYSv.css",
   "./favicon.svg",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
